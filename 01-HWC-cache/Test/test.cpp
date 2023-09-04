@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::cout << "Hello, World!\n";
+    cache_t<int, int> cache(3);
 
-    return 1;
+    return 0;
 }
