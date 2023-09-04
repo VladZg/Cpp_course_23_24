@@ -4,7 +4,7 @@ FLAGS  		=
 OBJ_DIR = ../Object
 SRC_DIR = ../Source
 
-all: compile link
+all: compile link clean
 
 compile:
 	@g++ -c $(TARGET).cpp $(FLAGS) -o $(OBJ_DIR)/$(TARGET).o
