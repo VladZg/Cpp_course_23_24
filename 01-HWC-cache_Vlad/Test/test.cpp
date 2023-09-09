@@ -7,21 +7,19 @@
 
 int main()
 {
-    int n = 3;
+    int size;
+    std::cin >> size;
+    Cache_t<int> cache(size);
 
-    // std::cin >> n;
+    int n_pages;
+    std::cin >> n_pages;
 
-    Cache_t<int> cache(n);
-
-    cache.update(1);
-    cache.update(2);
-    cache.update(3);
-    cache.update(2);
-    cache.update(4);
-    cache.update(2);
-    cache.update(5);
-    cache.update(4);
-    cache.update(1);
+    for (int i = 0; i < n_pages; i++)
+    {
+        int new_page_key;
+        std::cin >> new_page_key;
+        cache.update(new_page_key);
+    }
 
     // cache.dump();
 
