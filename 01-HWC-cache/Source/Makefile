@@ -1,4 +1,4 @@
-TARGET 		= test
+TARGET 		= cache
 FLAGS  		=
 
 OBJ_DIR = ../Object
