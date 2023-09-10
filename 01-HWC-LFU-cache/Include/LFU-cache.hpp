@@ -37,31 +37,33 @@ struct Cache_t
 
         auto hit = hash_t_.find(key);
 
+        // in case page is already in cache
         if (hit != hash_t_.end())
         {
-            hit->second->second.second++;
+            hit->second->second.second++;   // page_frequency++
 
             if ((hit->second != cache_.begin()) &&
-                (hit->second->second.second > std::prev(hit->second)->second.second))
+                (hit->second->second.second > std::prev(hit->second)->second.second))   // if frequency of just added page > frequency of a previous page
             {
-                cache_.splice(std::prev(hit->second), cache_, hit->second);
+                cache_.splice(std::prev(hit->second), cache_, hit->second); // swap just added page and that near page
             }
 
             // dump();
             return true;
         }
 
+        // in case page is not in cache
         std::pair<KeyT, std::pair<T, size_t>> new_page;
         new_page.second.second = 1;
         new_page.first = key;
 
-        if (is_full())
+        if (is_full())  // if cache is full
         {
-            hash_t_.erase(cache_.back().first);
+            hash_t_.erase(cache_.back().first); // delete the last (the less frequent) page from cache
             cache_.pop_back();
         }
 
-        cache_.push_back(new_page);
+        cache_.push_back(new_page); // add a new page to cache
         hash_t_.emplace(key, std::prev(cache_.end()));
 
         // dump();

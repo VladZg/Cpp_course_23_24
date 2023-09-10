@@ -3,70 +3,69 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <algorithm>
 #include <iterator>
 #include <list>
+#include <vector>
 
-template <typename T, typename KeyT = int>
-struct Perfect_cache_t
+int perfect_cache_hits(size_t cache_size, int n_page, std::vector<int> page_keys)
 {
-    using ListT  = typename std::list<std::pair<KeyT, std::pair<T, size_t>>>;
-    using ListIt = typename ListT::iterator;
-    using HashT  = typename std::unordered_map<KeyT, ListIt>;
-    using HashIt = typename HashT::iterator;
+    int hits = 0;
 
-    size_t  size_   ;
-    ListT   cache_  ;
-    HashT   hash_t_ ;
+    using  VectIt = typename std::vector<int>::iterator;
 
-    Perfect_cache_t(size_t size) { size_ = size; }
+    std::unordered_map<int, VectIt> next_appearance;
 
-    bool is_full() const { return (cache_.size() == size_); }
+    for (int i = n_page - 1; i >= 0; i--)
+        next_appearance[page_keys[i]] = std::find(page_keys.begin() + i + 1, page_keys.end(), page_keys[i]);
 
-    void dump()
+    std::list<int> cache;
+
+    for (int i = 0; i < n_page; i++)
     {
-        std::cout << "Cache_t dump: \n{\n\tkey :";
-        for (ListIt it = cache_.begin(); it != cache_.end(); ++it) { fprintf(stdout, "%3d", it->first); }
-        std::cout << "\n\tfreq:";
-        for (ListIt it = cache_.begin(); it != cache_.end(); ++it) { fprintf(stdout, "%3ld", it->second.second); }
-        std::cout << "\n}\n\n";
-    }
+        int cur = page_keys[i];
+        next_appearance[cur] = std::find(page_keys.begin() + i + 1, page_keys.end(), cur);
 
-    bool update(KeyT key)
-    {
-        if (size_ == 0) return false;
-
-        auto hit = hash_t_.find(key);
-
-        if (hit != hash_t_.end())
+        if (std::find(cache.begin(), cache.end(), cur) != cache.end())  // in case it's a hit
         {
-            hit->second->second.second++;
+            hits++;
+            continue;
+        }
 
-            if ((hit->second != cache_.begin()) &&
-                (hit->second->second.second > std::prev(hit->second)->second.second))
+        if (cache.size() < cache_size)  // in case it isn't a hit and list isn't full
+        {
+            cache.push_back(cur);
+            continue;
+        }
+
+        // in case cache is full and the page is new
+        int max_dist = 0;
+        int value_to_delete = -1;
+
+        for (std::list<int>::iterator it = cache.begin(); it != cache.end(); ++it)
+        {
+            VectIt next = next_appearance[*it];
+
+            // delete page that doesn't occur later
+            if (next == page_keys.end())
             {
-                cache_.splice(std::prev(hit->second), cache_, hit->second);
+                value_to_delete = *it;
+                break;
             }
 
-            // dump();
-            return true;
+            // look for the element that occurs the latest
+            if ((next - page_keys.begin()) > max_dist)
+            {
+                max_dist = next - page_keys.begin();
+                value_to_delete = *it;
+            }
         }
 
-        std::pair<KeyT, std::pair<T, size_t>> new_page;
-        new_page.second.second = 1;
-        new_page.first = key;
-
-        if (is_full())
-        {
-            hash_t_.erase(cache_.back().first);
-            cache_.pop_back();
-        }
-
-        cache_.push_back(new_page);
-        hash_t_.emplace(key, std::prev(cache_.end()));
-
-        // dump();
-        return false;
+        cache.remove(value_to_delete);
+        cache.push_back(cur);
     }
-};
+
+    return hits;
+}
 
 #endif
