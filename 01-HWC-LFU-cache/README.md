@@ -1,19 +1,17 @@
 # 01-HWC-LFU-cache
 
-**Authors**:
+## Authors:
 - Zagorodnyuk Vladislav
 - Kirkicha Andrey
 
 ## Introduction
 This project is the implementation of Least Frequently Used cache algorithm in C++.
 
-**The task was**:
+**The goals**:
 - Implement any cache algorithm of suggested ones (ARC, 2Q, LFU, LIRS)
 - Test it
 - Implement perfect cache algorithm
 - Compare the perfect cache with the one we implemented
-
-All points were done.
 
 ## Project desription
 Project contains **folders**:
@@ -124,7 +122,7 @@ TEST #7 >>> SUCCESS
 
 TEST #8 >>> SUCCESS
 
-========================================================= 
+=========================================================
 
 CORRECT TESTS: 8 / 8
 ```
