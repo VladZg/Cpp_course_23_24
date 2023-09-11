@@ -17,10 +17,10 @@ All points were done.
 
 ## Project desription
 Project contains **folders**:
-- ``Include``
-- ``Object``
-- ``Source``
-- ``Test``
+- Include
+- Object
+- Source
+- Test
 
 ### Include folder
 Contains header files that include implementations of both cache algorithms.
