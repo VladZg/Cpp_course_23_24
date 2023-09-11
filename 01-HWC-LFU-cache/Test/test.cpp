@@ -20,7 +20,7 @@ int main()
     {
         Cache_t<int> cache(cache_size);
 
-        std::cout << "\n" << ">>> TEST #" << ++test_number << "\n\n";
+        std::cout << "\n" << "TEST #" << ++test_number << " ";
 
         size_t n_keys;
         test_data >> n_keys;
@@ -44,11 +44,11 @@ int main()
             ++correct_tests;
         }
         else
-            std::cout << ">>> ERROR: expected " << result << ", recieved" << hits << "\n";
+            std::cout << ">>> ERROR: expected " << result << ", recieved " << hits << "\n";
     }
 
     std::cout << "\n========================================================= \n\n"
-            << ">>> CORRECT TESTS: " << correct_tests << " / " << test_number << "\n\n";
+            << "CORRECT TESTS: " << correct_tests << " / " << test_number << "\n\n";
 
     return 0;
 }

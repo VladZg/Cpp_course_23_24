@@ -31,7 +31,7 @@ int main()
     }
 
     std::cout << "LFU     cache: " << hits << "\n";
-    std::cout << "perfect cache: " << perfect_cache_hits(cache_size, n_page, page_keys) << "\n";
+    std::cout << "Perfect cache: " << perfect_cache_hits(cache_size, n_page, page_keys) << "\n";
 
     return 0;
 }
