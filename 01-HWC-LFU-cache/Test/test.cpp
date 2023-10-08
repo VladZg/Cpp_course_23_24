@@ -9,7 +9,7 @@
 
 int main()
 {
-    std::ifstream test_data("test_data.txt");
+    std::ifstream test_data("Test/test_data.txt");
     assert(test_data.good());
 
     size_t test_number = 0;

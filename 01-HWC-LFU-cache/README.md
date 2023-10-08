@@ -30,7 +30,7 @@ Created for *.o files. After linking all object files will be removed.
 Contains source file ``cache.cpp`` to test LFU cache algorithm in console and compare it with perfect cache.
 
 **To use this option**:
-- Run ``make`` in folder ``./Source/``
+- Run ``make -f ./Source/Makefile`` in the main project folder
 - Executable file ``cache`` will appear there
 - Run ``cache``
 
@@ -61,7 +61,7 @@ Input file: "test_data.txt"
 
 **To use this option**:
 - Fill file ``test_data.txt`` in folder ``./Test/`` with test data according to instruction below
-- Run ``make`` in folder ``./Test/``
+- Run ``make -f ./Test/Makefile`` in the main project folder
 - Executable file ``test`` will appear there
 - Run ``test``
 

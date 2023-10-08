@@ -1,13 +1,16 @@
 TARGET 		= cache
 FLAGS  		=
 
-OBJ_DIR = ../Object
-SRC_DIR = ../Source
+OBJ_DIR = Object
+SRC_DIR = Source
 
-all: compile link clean
+all: make_directory compile link remove_directory
+
+make_directory:
+	@mkdir -p $(OBJ_DIR)
 
 compile:
-	@g++ -c -g $(TARGET).cpp $(FLAGS) -o $(OBJ_DIR)/$(TARGET).o
+	@g++ -c -g $(SRC_DIR)/$(TARGET).cpp $(FLAGS) -o $(OBJ_DIR)/$(TARGET).o
 
 link:
 	@g++ $(OBJ_DIR)/*.o -o $(TARGET)
@@ -15,5 +18,5 @@ link:
 run:
 	@./$(TARGET)
 
-clean:
-	@rm -f $(OBJ_DIR)/*.o
+remove_directory:
+	@rm -r $(OBJ_DIR)
