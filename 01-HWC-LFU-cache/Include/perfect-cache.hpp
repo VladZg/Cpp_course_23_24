@@ -45,7 +45,7 @@ int perfect_cache_hits(size_t cache_size, int n_page, std::vector<int> page_keys
         int max_dist = 0;
         int value_to_delete = -1;
 
-        for (std::list<int>::iterator it = cache.begin(); it != cache.end(); ++it)
+        for (std::list<int>::iterator it = cache.begin(), c_end = cache.end(); it != c_end; ++it)
         {
             VectIt next = next_appearance[*it];
 
