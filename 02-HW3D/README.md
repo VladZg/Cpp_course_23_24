@@ -2,4 +2,3 @@
 
 ## Authors:
 - Zagorodnyuk Vladislav
-- Kirkicha Andrey
