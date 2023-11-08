@@ -12,7 +12,8 @@ int perfect_cache_hits(size_t cache_size, int n_page, std::vector<int> page_keys
 {
     int hits = 0;
 
-    using VectIt = typename std::vector<int>::iterator;
+    using  VectIt = typename std::vector<int>::iterator;
+
     std::unordered_map<int, VectIt> next_appearance;
 
     for (int i = n_page - 1; i >= 0; i--)
@@ -23,19 +24,15 @@ int perfect_cache_hits(size_t cache_size, int n_page, std::vector<int> page_keys
     for (int i = 0; i < n_page; i++)
     {
         int cur = page_keys[i];
+        next_appearance[cur] = std::find(page_keys.begin() + i + 1, page_keys.end(), cur);
 
-        // in case it's a hit
-        if (std::find(cache.begin(), cache.end(), cur) != cache.end())
+        if (std::find(cache.begin(), cache.end(), cur) != cache.end())  // in case it's a hit
         {
             hits++;
             continue;
         }
 
-        next_appearance[cur] = std::find(page_keys.begin() + i + 1, page_keys.end(), cur);
-        if (next_appearance[cur] == page_keys.end()) continue;
-
-        // in case it isn't a hit and list isn't full
-        if (cache.size() < cache_size)
+        if (cache.size() < cache_size)  // in case it isn't a hit and list isn't full
         {
             cache.push_back(cur);
             continue;
@@ -45,7 +42,7 @@ int perfect_cache_hits(size_t cache_size, int n_page, std::vector<int> page_keys
         int max_dist = 0;
         int value_to_delete = -1;
 
-        for (std::list<int>::iterator it = cache.begin(), c_end = cache.end(); it != c_end; ++it)
+        for (std::list<int>::iterator it = cache.begin(); it != cache.end(); ++it)
         {
             VectIt next = next_appearance[*it];
 
