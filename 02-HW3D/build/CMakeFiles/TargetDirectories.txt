@@ -1,4 +1,0 @@
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/02-HW3D/build/CMakeFiles/main.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/02-HW3D/build/CMakeFiles/test.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/02-HW3D/build/CMakeFiles/edit_cache.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/02-HW3D/build/CMakeFiles/rebuild_cache.dir

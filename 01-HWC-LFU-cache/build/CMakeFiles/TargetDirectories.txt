@@ -1,4 +1,0 @@
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/01-HWC-LFU-cache/build/CMakeFiles/cache.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/01-HWC-LFU-cache/build/CMakeFiles/test.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/01-HWC-LFU-cache/build/CMakeFiles/edit_cache.dir
-/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24/01-HWC-LFU-cache/build/CMakeFiles/rebuild_cache.dir
