@@ -24,6 +24,8 @@ struct Point
         return !((x_ != x_) || (y_ != y_) || (z_ != z_));
     }
 
+    Geometry2D::Point to_point2D() const { return Geometry2D::Point(x_, y_); }
+
     void print(const char* msg = "") const
     {
         std::cout << msg << "(" << x_ << ", " << y_ << ", " << z_ << ")";
@@ -47,6 +49,10 @@ public:
         return !((x_ != x_) || (y_ != y_) || (z_ != z_));
     }
 
+    double get_x() const { return x_; }
+    double get_y() const { return y_; }
+    double get_z() const { return z_; }
+
     Vec3 operator+ (const Vec3& v) const { return Vec3(x_+v.x_, y_+v.y_, z_+v.z_); }
     Vec3 operator- (const Vec3& v) const { return Vec3(x_-v.x_, y_-v.y_, z_-v.z_); }
     Vec3 operator* (double sqalar) const { return Vec3(x_*sqalar, y_*sqalar, z_*sqalar); }
@@ -67,6 +73,8 @@ public:
 
     bool is_collinear(const Vec3& v) const { return cross(v) == Vec3(); }
 
+    Point to_point() const { return Point(x_, y_, z_); }
+
     void print(const char* msg = "") const
     {
         std::cout << msg << "(" << x_ << ", " << y_ << ", " << z_ << ")" << std::endl;
@@ -75,8 +83,28 @@ public:
 
 class Line
 {
-    Point   p_;
-    Vec3    a_;
+    Point   p_  ;
+    Vec3    dir_;
+
+public:
+    Line() : p_(Point()), dir_(Vec3()) {}
+    Line(Point p, Vec3 dir) : p_(p), dir_(dir) {}
+
+    bool is_valid() const { return p_.is_valid() && dir_.is_valid() && (dir_ != Vec3()); }
+
+    Point get_p()   const { return p_  ; }
+    Vec3  get_dir() const { return dir_; }
+
+    void print(const char* msg = "") const
+    {
+        std::cout << msg << "point ";
+
+        p_.print();
+        std::cout << ", dir ";
+        dir_.print();
+
+        std::cout << std::endl;
+    }
 };
 
 class Plane
@@ -100,9 +128,35 @@ public:
     Vec3   get_n() { return n_; }
 
     bool is_point_on_plane(const Point& p) const { return fabs(n_.dot(Vec3(p)) + d_) < EPS; }
+    bool is_parallel(const Plane& pl) { return n_.is_collinear(pl.n_); }
+    bool is_parallel(const Vec3& v) const { return fabs(n_.dot(v)) < EPS; }
 
-    // not a real distance between a point and plane, but has the same sign
-    double signed_distance(const Point& point) const { return Vec3(point).dot(n_) + d_; }
+    // signed distance between a point and plane
+    double signed_distance(const Point& p) const { return (Vec3(p).dot(n_) + d_) / n_.mod(); }
+
+    Line intersection(const Plane& pl)
+    {
+        // if (is_parallel(pl))            // can't find line
+        // {
+        //     // std::cout << "PLANES ARE ";
+        //     return Line(Point(), Vec3());
+        // }
+
+        Vec3 dir = n_.cross(pl.n_);
+
+        double n1n2 = n_.dot(pl.n_);
+        double n1n1 = n_.dot(n_);
+        double n2n2 = pl.n_.dot(pl.n_);
+        double norm = n1n2*n1n2 - n1n1*n2n2;
+        double a = ((-pl.d_)*n1n2 - (-d_)*n2n2) / norm;
+        double b = ((-d_)*n1n2 - (-pl.d_)*n1n1) / norm;
+
+        Point p = Point(a*n_.get_x() + b*pl.n_.get_x(),
+                        a*n_.get_y() + b*pl.n_.get_y(),
+                        a*n_.get_z() + b*pl.n_.get_z() );
+
+        return Line(p, dir);
+    }
 
     void print(const char* msg = "") const
     {
@@ -142,6 +196,13 @@ public:
                 plane.signed_distance(p3_) };
     }
 
+    Geometry2D::Triangle to_triangle2D() const
+    {
+        return Geometry2D::Triangle(p1_.to_point2D(),
+                                    p2_.to_point2D(),
+                                    p3_.to_point2D());
+    }
+
     bool intersection(const Triangle& t) const
     {
         Plane plane1 = get_plane();
@@ -160,7 +221,18 @@ public:
             if (sgn_dst2[0]*sgn_dst2[1] >= 0.0 && sgn_dst2[1]*sgn_dst2[2] >= 0.0)
                 return false;
 
-        return true;
+        if (fabs(sgn_dst1[0]) < EPS && fabs(sgn_dst1[1]) < EPS && fabs(sgn_dst1[2]) < EPS)
+        {
+            // triangles are co-planar, check their 2D intersection
+            Geometry2D::Triangle t1_2D = to_triangle2D();
+            Geometry2D::Triangle t2_2D = t.to_triangle2D();
+
+            return t1_2D.intersection(t2_2D);
+        }
+
+        Line intersection_line = plane1.intersection(plane2);
+
+        return false;
     }
 
     void print(const char* msg = "") const

@@ -85,9 +85,9 @@ class LineSegment
     Point p2_;
 
 public:
-    LineSegment () :  p1_(Point()), p2_(Point()) {}
-    LineSegment (Point p1, Point p2) :  p1_(p1), p2_(p2) {}
-    LineSegment (Point p) :  p1_(p), p2_(p) {}
+    LineSegment() :  p1_(Point()), p2_(Point()) {}
+    LineSegment(Point p1, Point p2) :  p1_(p1), p2_(p2) {}
+    LineSegment(Point p) :  p1_(p), p2_(p) {}
 
     bool is_valid() const { return p1_.is_valid() && p2_.is_valid(); }
 
@@ -101,9 +101,9 @@ class Line
     Vec2    dir_;
 
 public:
-    Line () : p_(Point()), dir_(Vec2()) {}
-    Line (Point p, Vec2 dir) : p_(p), dir_(dir) {}
-    Line (Point p, double angle) : p_(p), dir_(Vec2(cos(angle), sin(angle))) {}
+    Line() : p_(Point()), dir_(Vec2()) {}
+    Line(Point p, Vec2 dir) : p_(p), dir_(dir) {}
+    Line(Point p, double angle) : p_(p), dir_(Vec2(cos(angle), sin(angle))) {}
 
     bool is_valid() const { return p_.is_valid() && dir_.is_valid() && (dir_ != Vec2()); }
 
@@ -128,6 +128,11 @@ public:
     Point get_p1() const { return p1_; }
     Point get_p2() const { return p2_; }
     Point get_p3() const { return p3_; }
+
+    bool intersection(const Triangle& t) const
+    {
+        return true;
+    }
 
     void print(const char* msg = "") const
     {
