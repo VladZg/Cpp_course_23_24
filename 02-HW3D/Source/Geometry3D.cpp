@@ -90,7 +90,7 @@ bool Plane::is_parallel(const Vec3& v) const { return fabs(n_.dot(v)) < EPS; }
 // signed distance between a point and plane
 double Plane::signed_distance(const Point& p) const { return (Vec3(p).dot(n_) + d_) / n_.mod(); }
 
-Line Plane::intersection(const Plane& pl) const
+Line Plane::intersect(const Plane& pl) const
 {
     // if (is_parallel(pl))            // can't find line
     // {
@@ -141,7 +141,7 @@ Geometry2D::Triangle Triangle::to_triangle2D() const
                                 p3_.to_point2D());
 }
 
-bool Triangle::intersection(const Triangle& t) const
+bool Triangle::intersect(const Triangle& t) const
 {
     Plane plane1 = get_plane();
     Plane plane2 = t.get_plane();
@@ -165,10 +165,11 @@ bool Triangle::intersection(const Triangle& t) const
         Geometry2D::Triangle t1_2D = to_triangle2D();
         Geometry2D::Triangle t2_2D = t.to_triangle2D();
 
-        return t1_2D.intersection(t2_2D);
+        return t1_2D.intersect(t2_2D);
     }
 
-    Line intersection_line = plane1.intersection(plane2);
+    Line intersection_line = plane1.intersect(plane2);
+    //
 
     return false;
 }

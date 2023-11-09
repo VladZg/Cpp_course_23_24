@@ -121,7 +121,7 @@ public:
     // signed distance between a point and plane
     double signed_distance(const Point& p) const;
 
-    Line intersection(const Plane& pl) const;
+    Line intersect(const Plane& pl) const;
 
     void print(const char* msg) const;
 };
@@ -150,7 +150,7 @@ public:
 
     Geometry2D::Triangle to_triangle2D() const;
 
-    bool intersection(const Triangle& t) const;
+    bool intersect(const Triangle& t) const;
 
     void print(const char* msg) const;
 };

@@ -57,7 +57,7 @@ int main()
     Geometry3D::Triangle tr2{d, f, e};
     tr2.print("Triangle #2: ");
 
-    if (!tr2.intersection(tr1)) std::cout << "Not intersected\n";
+    if (!tr2.intersect(tr1)) std::cout << "Not intersected\n";
     else std::cout << "Intersected\n";
 
 //     std::cout << "\n\n\n";
@@ -70,7 +70,7 @@ int main()
 //
 //     plane1.print("PLANE 1: ");
 //     plane2.print("PLANE 2: ");
-//     plane1.intersection(plane2).print("INTERSECTION LINE: ");
+//     plane1.intersect(plane2).print("INTERSECTION LINE: ");
 
     return 0;
 }
