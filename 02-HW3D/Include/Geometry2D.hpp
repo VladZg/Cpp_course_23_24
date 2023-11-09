@@ -1,9 +1,7 @@
 #ifndef GEOMETRY_2D_HPP
 #define GEOMETRY_2D_HPP
 
-#include <iostream>
 #include <cmath>
-#include <vector>
 #include <limits>
 
 namespace Geometry2D
@@ -19,20 +17,14 @@ struct Point
     Point() : x_(0.0), y_(0.0) {}
     Point(double x, double y) : x_(x), y_(y) {}
 
-    bool is_valid() const
-    {
-        return !((x_ != x_) || (y_ != y_));
-    }
+    bool is_valid() const { return !((x_ != x_) || (y_ != y_)); }
 
-    Point operator+ (const Point& p) const { return Point(x_+p.x_, y_+p.y_)                    ; }
-    Point operator- (const Point& p) const { return Point(x_-p.x_, y_-p.y_)                    ; }
-    bool  operator==(const Point& p) const { return fabs(x_-p.x_) < EPS && fabs(y_==p.y_) < EPS; }
-    bool  operator!=(const Point& p) const { return !(*this == p)                              ; }
+    Point operator+ (const Point& p) const;
+    Point operator- (const Point& p) const;
+    bool  operator==(const Point& p) const;
+    bool  operator!=(const Point& p) const;
 
-    void print(const char* msg = "") const
-    {
-        std::cout << msg << "(" << x_ << ", " << y_ << ")";
-    }
+    void print(const char* msg) const;
 };
 
 class Vec2
@@ -49,34 +41,21 @@ public:
     double get_x() const { return x_; }
     double get_y() const { return y_; }
 
-    bool is_valid() const
-    {
-        return !((x_ != x_) || (y_ != y_));
-    }
+    bool is_valid() const { return !((x_ != x_) || (y_ != y_)); }
 
-    Vec2 operator+ (const Vec2& v) const { return Vec2(x_+v.x_, y_+v.y_)                     ; }
-    Vec2 operator- (const Vec2& v) const { return Vec2(x_-v.x_, y_-v.y_)                     ; }
-    Vec2 operator* (double sqalar) const { return Vec2(x_*sqalar, y_*sqalar)                 ; }
-    bool operator==(const Vec2& v) const { return fabs(x_-v.x_) < EPS && fabs(y_==v.y_) < EPS; }
-    bool operator!=(const Vec2& v) const { return !(*this == v)                              ; }
+    Vec2 operator+ (const Vec2& v) const;
+    Vec2 operator- (const Vec2& v) const;
+    Vec2 operator* (double sqalar) const;
+    bool operator==(const Vec2& v) const;
+    bool operator!=(const Vec2& v) const;
 
-    double mod() const { return fsqrt(pow(x_, 2) + pow(y_, 2)); }
+    double mod() const;
+    Vec2 norm() const;
+    Vec2 sqalar(double sqalar) const;
+    double dot(const Vec2& v) const;
+    bool is_collinear(const Vec2& v) const;
 
-    Vec2 norm()
-    {
-        double mod = this->mod();
-        return Vec2(x_/mod, y_/mod);
-    }
-
-    Vec2 sqalar(double sqalar) const { return Vec2(x_*sqalar, y_*sqalar); }
-    double dot(const Vec2& v) const { return x_*v.x_ + y_*v.y_; }
-    // double angle(const Vec2& v) const { return acos(dot(v)/(mod()*v.mod())); }
-    bool is_collinear(const Vec2& v) const { return x_*v.y_ - y_*v.x_ < EPS; }
-
-    void print(const char* msg = "") const
-    {
-        std::cout << msg << "(" << x_ << ", " << y_ << ")" << std::endl;
-    }
+    void print(const char* msg) const;
 };
 
 class LineSegment
@@ -129,21 +108,9 @@ public:
     Point get_p2() const { return p2_; }
     Point get_p3() const { return p3_; }
 
-    bool intersection(const Triangle& t) const
-    {
-        return true;
-    }
+    bool intersection(const Triangle& t) const;
 
-    void print(const char* msg = "") const
-    {
-        std::cout << msg;
-
-        p1_.print();
-        p2_.print(" ");
-        p3_.print(" ");
-
-        std::cout << std::endl;
-    }
+    void print(const char* msg) const;
 };
 
 }

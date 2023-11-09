@@ -1,6 +1,7 @@
 #ifndef GEOMETRY_CPP
 #define GEOMETRY_CPP
 
+#include <iostream>
 #include "../Include/Geometry2D.hpp"
 #include "../Include/Geometry3D.hpp"
 
