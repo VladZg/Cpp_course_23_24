@@ -142,7 +142,7 @@ std::vector<double> Triangle::signed_distances(const Plane& plane) const
             plane.signed_distance(p3_) };
 }
 
-std::vector<double> Triangle::projection_interval(const Line& l, const std::vector<double>& sgn_dst) const
+std::vector<double> Triangle::projection_interval(const Line& l, const std::vector<double>& sgn_dst) const // all sgn_dst are not 0 at the same time
 {
     std::vector<double> interval(2);  // line segment projection of the triangle on the line
 
@@ -169,13 +169,28 @@ std::vector<double> Triangle::projection_interval(const Line& l, const std::vect
     // std::cout << "(" << projections[0] << ", " << projections[1] << ", " << projections[2] \
               << "), right = " << index_right << ", left = " << index_left << ", middle = " << index_middle << "\n";
 
-    interval[0] = projections[index_left  ] + (projections[index_right] - projections[index_left  ]) * sgn_dst[index_left  ] / (sgn_dst[index_left  ] - sgn_dst[index_right]);
-    interval[1] = projections[index_middle] + (projections[index_right] - projections[index_middle]) * sgn_dst[index_middle] / (sgn_dst[index_middle] - sgn_dst[index_right]);
+    if (fabs(sgn_dst[index_left ] - sgn_dst[index_middle]) < EPS) // check if these 2 points are on the line
+    {
+        interval[0] = projections[index_left ]; // because line direction vector is normalized
+        interval[1] = projections[index_right] + (projections[index_middle] - projections[index_right]) * sgn_dst[index_right] / (sgn_dst[index_right] - sgn_dst[index_middle]);
+    }
+
+    else if (fabs(sgn_dst[index_right ] - sgn_dst[index_middle]) < EPS) // check if these 2 points are on the line
+    {
+        interval[0] = projections[index_left ] + (projections[index_middle] - projections[index_left ]) * sgn_dst[index_left ] / (sgn_dst[index_left ] - sgn_dst[index_middle]);
+        interval[1] = projections[index_right];
+    }
+
+    else
+    {
+        interval[0] = projections[index_left ] + (projections[index_middle] - projections[index_left ]) * sgn_dst[index_left ] / (sgn_dst[index_left ] - sgn_dst[index_middle]);
+        interval[1] = projections[index_right] + (projections[index_middle] - projections[index_right]) * sgn_dst[index_right] / (sgn_dst[index_right] - sgn_dst[index_middle]);
+    }
 
     if (interval[0] > interval[1])
         std::swap(interval[0], interval[1]);
 
-    // std::cout << "interval1: [" << interval[0] << "," << interval[1] << "]\n";
+    // std::cout << "interval: [" << interval[0] << "," << interval[1] << "]\n";
 
     return interval;
 }

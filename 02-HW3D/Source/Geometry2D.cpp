@@ -142,7 +142,7 @@ bool Triangle::is_point_inside(const Point &p) const
 {
     Vec2 v0 = Vec2(p1_, p3_);
     Vec2 v1 = Vec2(p1_, p2_);
-    Vec2 v2 = Vec2(p1_, p);
+    Vec2 v2 = Vec2(p1_, p  );
 
     double v0v0 = v0.dot(v0);
     double v0v1 = v0.dot(v1);

@@ -2,75 +2,91 @@
 #define GEOMETRY_CPP
 
 #include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <unordered_set>
 #include "../Include/Geometry2D.hpp"
 #include "../Include/Geometry3D.hpp"
 
+using namespace Geometry3D;
+
+void input_triangles(int n, std::vector<Triangle>& fig_arr, std::ifstream& in_file)
+{
+    std::vector<Point> tr_points(3);
+    int x, y, z;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            in_file >> x >> y >> z;
+            // std::cout << "(" << x << ", " << y << ", " << z << ")\n";
+            tr_points[j] = Point(x, y, z);
+        }
+
+        Triangle tr = Triangle(tr_points[0], tr_points[1], tr_points[2]);
+        fig_arr.push_back(tr);
+    }
+}
+
+bool intersect_figures(const Triangle& t1, const Triangle& t2)
+{
+    return t1.intersect(t2);
+}
+
+void intersect_all(const std::vector<Triangle>& fig_arr, std::unordered_set<int> index_set)
+{
+    int n = fig_arr.size();
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i+1; j < n; j++)
+        {
+            if(intersect_figures(fig_arr[i], fig_arr[j]))
+            {
+                std::cout << "INTERSECTION: triangle " << i << " with triangle " << j << ":\n";
+                fig_arr[i].print("");
+                fig_arr[j].print("");
+                std::cout << std::endl;
+
+                index_set.insert(i);
+                index_set.insert(j);
+            }
+        }
+    }
+}
+
 int main()
 {
-    Geometry3D::Point a{0, 0, 0};
-    Geometry3D::Point b{2, 0, 0};
-    Geometry3D::Point c{0, 2, 0};
+    std::ifstream in_file;
+    in_file.open("../Test/test_data.txt");
 
-    Geometry3D::Vec3 v1{a};
-    Geometry3D::Vec3 v2{b};
+    if (in_file.is_open())
+    {
 
-    v1.print("Vector #1: ");
-    v2.print("Vector #2: ");
-    (v1+v2).print("v1 + v2: ");
-    (v1-v2).print("v1 - v2: ");
-    std::cout << "v1 * v2: " << v1.dot(v2) << std::endl;
-    v1.cross(v2).print("v1 x v2: ");
-    // std::cout << "angle(v1, v2): " << v1.angle(v2) << std::endl;
+    std::vector<Triangle> fig_arr;
 
-//     Geometry2D::Point a{1, 2};
-//     Geometry2D::Point b{2, 3};
-//     Geometry2D::Point c{3, 4};
-//
-//     Geometry2D::Vec2 v1{a, b};
-//     Geometry2D::Vec2 v2{b, c};
-//
-//     v1.print("Vector #1: ");
-//     v2.print("Vector #2: ");
-//     (v1+v2).print("v1 + v2: ");
-//     (v1-v2).print("v1 - v2: ");
-//     std::cout << "(v1, v2): " << v1.dot(v2) << std::endl;
-//     // v1.cross(v2).print("v1 x v2: ");
+    int n;
+    in_file >> n;
+    input_triangles(n, fig_arr, in_file);
 
-    Geometry3D::Triangle tr1{a, b, c};
-    tr1.print("Triangle #1: ");
+    in_file.close();
 
-    Geometry3D::Plane plane = tr1.get_plane();
-    plane.print("Triangle #1 is on plane: ");
+    std::unordered_set<int> index_set;
 
-    if (plane.is_point_on_plane(a)) std::cout << "Point a is on plane\n";
-    if (plane.is_point_on_plane(b)) std::cout << "Point b is on plane\n";
-    if (plane.is_point_on_plane(c)) std::cout << "Point c is on plane\n";
+    intersect_all(fig_arr, index_set);
 
-    Geometry3D::Point d = Geometry3D::Point{0, 0, 0};
-    Geometry3D::Point f = Geometry3D::Point{1, 0, 0};
-    Geometry3D::Point e = Geometry3D::Point{0, 1, 0};
+    std::vector<int> index_vec;
+    index_vec.insert(index_vec.begin(), index_set.begin(), index_set.end());
+    std::sort(index_vec.begin(), index_vec.end());
 
-    std::cout << "signed distance between point d and plane 1: " << plane.signed_distance(d) << std::endl;
-    std::cout << "signed distance between point f and plane 1: " << plane.signed_distance(f) << std::endl;
-    std::cout << "signed distance between point e and plane 1: " << plane.signed_distance(e) << std::endl;
+    std::cout << "Indexes of triangles that intersects: ";
+    // using SetIt = typename std::unordered_set<int>::iterator;
+    for (auto it  = index_vec.begin(); it != index_vec.end(); ++it)
+        std::cout << *it << " ";
+    std::cout << std::endl;
 
-    Geometry3D::Triangle tr2{d, f, e};
-    tr2.print("Triangle #2: ");
-
-    if (!tr2.intersect(tr1)) std::cout << "Not intersected\n";
-    else std::cout << "Intersected\n";
-
-//     std::cout << "\n\n\n";
-//
-//     // Geometry3D::Plane plane1 = Geometry3D::Plane{Geometry3D::Point(1,2,3), Geometry3D::Point(3,4.5,17), Geometry3D::Point(0,0,0)};
-//     // Geometry3D::Plane plane2 = Geometry3D::Plane{Geometry3D::Point(-1,2,5), Geometry3D::Point(7,3,-1), Geometry3D::Point(0,1,1)};
-//
-//     Geometry3D::Plane plane1 = Geometry3D::Plane{Geometry3D::Vec3{17, 8.9, 93}, -7};
-//     Geometry3D::Plane plane2 = Geometry3D::Plane{Geometry3D::Vec3{13, 0, -4.5}, 0.8};
-//
-//     plane1.print("PLANE 1: ");
-//     plane2.print("PLANE 2: ");
-//     plane1.intersect(plane2).print("INTERSECTION LINE: ");
+    } else std::cerr << "Problem in opening file with test data\n";
 
     return 0;
 }
