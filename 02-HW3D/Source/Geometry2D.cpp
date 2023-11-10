@@ -23,6 +23,18 @@ void Point::print(const char* msg = "") const
     std::cout << msg << "(" << x_ << ", " << y_ << ")";
 }
 
+Vec2 Geometry2D::vec_line_projection(const Vec2& v, const Line& l)
+{
+    return l.get_dir().sqalar(v.dot(l.get_dir()));
+}
+
+Point Geometry2D::point_line_projection(const Point& p, const Line& l)
+{
+    Vec2 v_proj = vec_line_projection(Vec2(l.get_p(), p), l);
+
+    return (Vec2(p)+v_proj).to_point();
+}
+
 
 Vec2 Vec2::operator+ (const Vec2& v) const { return Vec2(x_+v.x_, y_+v.y_)                     ; }
 Vec2 Vec2::operator- (const Vec2& v) const { return Vec2(x_-v.x_, y_-v.y_)                     ; }
@@ -138,22 +150,19 @@ bool Triangle::is_point_inside(const Point &p) const
     double v1v1 = v1.dot(v1);
     double v1v2 = v1.dot(v2);
 
-    double invDenom = 1 / (v0v0 * v1v1 - v0v1 * v0v1);
-    double u = (v1v1 * v0v2 - v0v1 * v1v2) * invDenom;
-    double v = (v0v0 * v1v2 - v0v1 * v0v2) * invDenom;
+    double norm = 1 / (v0v0 * v1v1 - v0v1 * v0v1);
+    double u = (v1v1 * v0v2 - v0v1 * v1v2) * norm;
+    double v = (v0v0 * v1v2 - v0v1 * v0v2) * norm;
 
     return (u >= 0) && (v >= 0) && (u + v <= 1);
 }
 
 bool Triangle::intersect(const LineSegment &ls) const
 {
-    if (is_point_inside(ls.get_p()) || is_point_inside((Vec2(ls.get_p())+ls.get_dir()).to_point()))
+    if (is_point_inside(ls.get_p()) || is_point_inside(ls.get_p2()))
         return true;
 
-    if (ls.intersect(LineSegment(p1_,p2_)) || ls.intersect(LineSegment(p2_, p3_)) || ls.intersect(LineSegment(p3_, p1_)))
-        return true;
-
-    return false;
+    return ls.intersect(LineSegment(p1_,p2_)) || ls.intersect(LineSegment(p2_, p3_)) || ls.intersect(LineSegment(p3_, p1_));
 }
 
 bool Triangle::intersect(const Triangle& t) const
@@ -164,8 +173,17 @@ bool Triangle::intersect(const Triangle& t) const
     if (t.is_point_inside(p1_) || t.is_point_inside(p2_) || t.is_point_inside(p3_))
         return true;
 
-    if (t.intersect(LineSegment(p1_,p2_)) || t.intersect(LineSegment(p2_, p3_)) || t.intersect(LineSegment(p3_, p1_)))
-        return true;
+    std::vector<LineSegment> edges1{LineSegment(  p1_,  p2_), LineSegment(  p2_,  p3_), LineSegment(  p3_,  p1_)};
+    std::vector<LineSegment> edges2{LineSegment(t.p1_,t.p2_), LineSegment(t.p2_,t.p3_), LineSegment(t.p3_,t.p1_)};
+
+    for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+    {
+        int i_next = (i + 1) % 3;
+        int j_next = (j + 1) % 3;
+        if (edges1[i_next].intersect(edges2[j_next]))
+            return true;
+    }
 
     return false;
 }

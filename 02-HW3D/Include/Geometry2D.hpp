@@ -79,6 +79,7 @@ public:
     bool is_valid() const { return p_.is_valid() && dir_.is_valid(); }
 
     Point get_p() const { return p_; }
+    Point get_p2() const { return (Vec2(p_)+dir_).to_point(); }
     Vec2 get_dir() const { return dir_; }
 
     bool operator==(const LineSegment& l) const;
@@ -141,6 +142,9 @@ public:
 
     void print(const char* msg) const;
 };
+
+Vec2 vec_line_projection(const Vec2& v, const Line& l);
+Point point_line_projection(const Point& p, const Line& l);
 
 }
 

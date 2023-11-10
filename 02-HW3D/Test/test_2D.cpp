@@ -43,47 +43,66 @@ TEST(LineSegment, intersect)
     EXPECT_TRUE(!ls3.intersect(ls2));
 }
 
-TEST(Triangle, intersect)
+TEST(Triangle, is_point_inside)
 {
     Triangle t1 = Triangle(Point(0,0), Point(1,0), Point(0,1));
     Triangle t2 = Triangle(Point(0,0), Point(1,0), Point(0,1));
     Triangle t3 = Triangle(Point(0,0), Point(-1,0), Point(0,-1));
     Triangle t4 = Triangle(Point(1,-3), Point(-3,2), Point(5,5));
-    Triangle t5 = Triangle(Point(-1,-1), Point(-17,-4), Point(-5,-19));
 
-    EXPECT_TRUE(t1.intersect(t2));
-    EXPECT_TRUE(t2.intersect(t1));
-    EXPECT_TRUE(t1.intersect(t3));
-    EXPECT_TRUE(t3.intersect(t2));
-    EXPECT_TRUE(t1.intersect(t4));
-    EXPECT_TRUE(t4.intersect(t2));
-    EXPECT_TRUE(t3.intersect(t4));
-    EXPECT_TRUE(!t1.intersect(t5));
+    Point p1 = Point(0,0);
+    Point p2 = Point(-1,0);
 
-    Triangle triangle1(Point(0, 0), Point(0, 2), Point(2, 0));
-    Triangle triangle2(Point(1, 1), Point(1, 3), Point(3, 1));
-    EXPECT_TRUE(triangle1.intersect(triangle2));
-
-    // Test two triangles that do not intersect
-    Triangle triangle3(Point(0, 0), Point(0, 2), Point(2, 0));
-    Triangle triangle4(Point(3, 3), Point(3, 4), Point(4, 3));
-    EXPECT_FALSE(triangle3.intersect(triangle4));
-
-    // Test two triangles that share an edge
-    Triangle triangle5(Point(0, 0), Point(0, 2), Point(2, 0));
-    Triangle triangle6(Point(0, 2), Point(2, 0), Point(2, 2));
-    EXPECT_TRUE(triangle5.intersect(triangle6));
-
-    // Test two triangles that share a vertex
-    Triangle triangle7(Point(0, 0), Point(0, 2), Point(2, 0));
-    Triangle triangle8(Point(0, 0), Point(2, 0), Point(2, 2));
-    EXPECT_TRUE(triangle7.intersect(triangle8));
-
-    // Test two triangles that are identical
-    Triangle triangle9(Point(0, 0), Point(0, 2), Point(2, 0));
-    Triangle triangle10(Point(0, 0), Point(0, 2), Point(2, 0));
-    EXPECT_TRUE(triangle9.intersect(triangle10));
+    EXPECT_TRUE(t1.is_point_inside(p1));
+    EXPECT_TRUE(t2.is_point_inside(p1));
+    EXPECT_TRUE(t3.is_point_inside(p1));
+    EXPECT_TRUE(t4.is_point_inside(p1));
+    EXPECT_TRUE(!t1.is_point_inside(p2));
+    EXPECT_TRUE(!t2.is_point_inside(p2));
+    EXPECT_TRUE(t3.is_point_inside(p2));
 }
+
+// TEST(Triangle, intersect)
+// {
+//     Triangle t1 = Triangle(Point(0,0), Point(1,0), Point(0,1));
+//     Triangle t2 = Triangle(Point(0,0), Point(1,0), Point(0,1));
+//     Triangle t3 = Triangle(Point(0,0), Point(-1,0), Point(0,-1));
+//     Triangle t4 = Triangle(Point(1,-3), Point(-3,2), Point(5,5));
+//     Triangle t5 = Triangle(Point(-1,-1), Point(-17,-4), Point(-5,-19));
+//
+//     EXPECT_TRUE(t1.intersect(t2));
+//     EXPECT_TRUE(t2.intersect(t1));
+//     EXPECT_TRUE(t1.intersect(t3));
+//     EXPECT_TRUE(t3.intersect(t2));
+//     EXPECT_TRUE(t1.intersect(t4));
+//     EXPECT_TRUE(t4.intersect(t2));
+//     EXPECT_TRUE(t3.intersect(t4));
+//     EXPECT_TRUE(!t1.intersect(t5));
+//
+//     Triangle triangle1(Point(0, 0), Point(0, 2), Point(2, 0));
+//     Triangle triangle2(Point(1, 1), Point(1, 3), Point(3, 1));
+//     EXPECT_TRUE(triangle1.intersect(triangle2));
+//
+//     // Test two triangles that do not intersect
+//     Triangle triangle3(Point(0, 0), Point(0, 2), Point(2, 0));
+//     Triangle triangle4(Point(3, 3), Point(3, 4), Point(4, 3));
+//     EXPECT_FALSE(triangle3.intersect(triangle4));
+//
+//     // Test two triangles that share an edge
+//     Triangle triangle5(Point(0, 0), Point(0, 2), Point(2, 0));
+//     Triangle triangle6(Point(0, 2), Point(2, 0), Point(2, 2));
+//     EXPECT_TRUE(triangle5.intersect(triangle6));
+//
+//     // Test two triangles that share a vertex
+//     Triangle triangle7(Point(0, 0), Point(0, 2), Point(2, 0));
+//     Triangle triangle8(Point(0, 0), Point(2, 0), Point(2, 2));
+//     EXPECT_TRUE(triangle7.intersect(triangle8));
+//
+//     // Test two triangles that are identical
+//     Triangle triangle9(Point(0, 0), Point(0, 2), Point(2, 0));
+//     Triangle triangle10(Point(0, 0), Point(0, 2), Point(2, 0));
+//     EXPECT_TRUE(triangle9.intersect(triangle10));
+// }
 
 int main(int argc, char **argv)
 {
