@@ -54,6 +54,7 @@ public:
 
     Point to_point() const;
 
+    // int max_compomemt() const;
     double mod() const;
     Vec2 norm() const;
     Vec2 sqalar(double sqalar) const;

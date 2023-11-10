@@ -25,7 +25,7 @@ struct Point
     bool operator==(const Point& p) const;
     bool operator!=(const Point& p) const;
 
-    Geometry2D::Point to_point2D() const;
+    Geometry2D::Point to_point2D(int axis_index) const;
     // Vec3 to_vec() const { return Vec3(x_, y_, z_); }
 
     void print(const char* msg) const;
@@ -55,12 +55,13 @@ public:
     bool operator==(const Vec3& v) const;
     bool operator!=(const Vec3& v) const;
 
+    int max_compomemt() const;
     double mod() const;
     Vec3 norm() const;
     Vec3 sqalar(double sqalar) const;
     double dot(const Vec3& v) const;
     Vec3 cross(const Vec3& v) const;
-    // double angle(const Vec3& v) const { return acos(dot(v)/(this->mod()*v.mod())); }
+    double cos_angle(const Vec3& v) const;
 
     bool is_collinear(const Vec3& v) const;
     double similarity_coeff(const Vec3& v) const; // only for collinear vectors
@@ -146,9 +147,10 @@ public:
 
     Plane get_plane() const;
 
-    std::vector<double> signed_distances(const Plane& plane) const;
+    std::vector<double> signed_distances(const Plane& pl) const;
+    std::vector<double> projection_interval(const Line& l, const std::vector<double>& sgn_dst) const;
 
-    Geometry2D::Triangle to_triangle2D() const;
+    Geometry2D::Triangle to_triangle2D(int axis_index) const;
 
     bool intersect(const Triangle& t) const;
 

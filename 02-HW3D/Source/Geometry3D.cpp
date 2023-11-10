@@ -15,7 +15,15 @@ using namespace Geometry3D;
 bool Point::operator==(const Point& p) const { return fabs(x_-p.x_) < EPS && fabs(y_==p.y_) < EPS && fabs(z_==p.z_) < EPS; }
 bool Point::operator!=(const Point& p) const { return !(*this == p); }
 
-Geometry2D::Point Point::to_point2D() const { return Geometry2D::Point(x_, y_); }
+Geometry2D::Point Point::to_point2D(int axis_index) const
+{
+    std::vector<double> coords = {x_, y_, z_};
+
+    int axis1_index = (axis_index+1) % 3;
+    int axis2_index = (axis_index+2) % 3;
+
+    return Geometry2D::Point(coords[axis1_index], coords[axis2_index]);
+}
 
 void Point::print(const char* msg = "") const
 {
@@ -29,12 +37,13 @@ Vec3 Vec3::operator* (double sqalar) const { return Vec3(x_*sqalar, y_*sqalar, z
 bool Vec3::operator==(const Vec3& v) const { return fabs(x_-v.x_) < EPS && fabs(y_-v.y_) < EPS && fabs(z_-v.z_) < EPS; }
 bool Vec3::operator!=(const Vec3& v) const { return !(*this == v); }
 
+int Vec3::max_compomemt() const { return (x_ >= y_) ? ((x_ >= z_) ? 0 : 2) : ((y_ >= z_) ? 1 : 2 ); }
 double Vec3::mod() const { return fsqrt(pow(x_, 2) + pow(y_, 2) + pow(z_, 2)); }
 Vec3 Vec3::norm() const { double mod = this->mod(); return Vec3(x_/mod, y_/mod, z_/mod); }
 Vec3 Vec3::sqalar(double sqalar) const { return Vec3(x_*sqalar, y_*sqalar, z_*sqalar); }
 double Vec3::dot(const Vec3& v) const { return x_*v.x_ + y_*v.y_ + z_*v.z_; }
 Vec3 Vec3::cross(const Vec3& v) const { return Vec3(y_*v.z_-z_*v.y_, z_*v.x_-x_*v.z_, x_*v.y_-y_*v.x_); }
-// double angle(const Vec3& v) const { return acos(dot(v)/(this->mod()*v.mod())); }
+double Vec3::cos_angle(const Vec3& v) const { return dot(v)/(mod()*v.mod()); }
 
 bool Vec3::is_collinear(const Vec3& v) const { return cross(v) == Vec3(); }
 double Vec3::similarity_coeff(const Vec3& v) const // only for collinear vectors
@@ -94,7 +103,6 @@ Line Plane::intersect(const Plane& pl) const
 {
     // if (is_parallel(pl))            // can't find line
     // {
-    //     // std::cout << "PLANES ARE ";
     //     return Line(Point(), Vec3());
     // }
 
@@ -134,11 +142,49 @@ std::vector<double> Triangle::signed_distances(const Plane& plane) const
             plane.signed_distance(p3_) };
 }
 
-Geometry2D::Triangle Triangle::to_triangle2D() const
+std::vector<double> Triangle::projection_interval(const Line& l, const std::vector<double>& sgn_dst) const
 {
-    return Geometry2D::Triangle(p1_.to_point2D(),
-                                p2_.to_point2D(),
-                                p3_.to_point2D());
+    std::vector<double> interval(2);  // line segment projection of the triangle on the line
+
+    Vec3 d = l.get_dir();
+    std::vector<double> projections = {d.dot(Vec3(p1_)), d.dot(Vec3(p2_)), d.dot(Vec3(p3_))};
+
+    int index_left = 0;
+    int index_right = 0;
+
+    double max_proj = projections[0];
+    double min_proj = projections[0];
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (projections[i] > max_proj)
+            index_right = i;
+
+        else if (projections[i] < min_proj)
+            index_left = i;
+    }
+
+    int index_middle = 3 - (index_left + index_right);
+
+    // std::cout << "(" << projections[0] << ", " << projections[1] << ", " << projections[2] \
+              << "), right = " << index_right << ", left = " << index_left << ", middle = " << index_middle << "\n";
+
+    interval[0] = projections[index_left  ] + (projections[index_right] - projections[index_left  ]) * sgn_dst[index_left  ] / (sgn_dst[index_left  ] - sgn_dst[index_right]);
+    interval[1] = projections[index_middle] + (projections[index_right] - projections[index_middle]) * sgn_dst[index_middle] / (sgn_dst[index_middle] - sgn_dst[index_right]);
+
+    if (interval[0] > interval[1])
+        std::swap(interval[0], interval[1]);
+
+    // std::cout << "interval1: [" << interval[0] << "," << interval[1] << "]\n";
+
+    return interval;
+}
+
+Geometry2D::Triangle Triangle::to_triangle2D(int axis_index) const
+{
+    return Geometry2D::Triangle(p1_.to_point2D(axis_index),
+                                p2_.to_point2D(axis_index),
+                                p3_.to_point2D(axis_index));
 }
 
 bool Triangle::intersect(const Triangle& t) const
@@ -147,31 +193,41 @@ bool Triangle::intersect(const Triangle& t) const
     Plane plane2 = t.get_plane();
 
     std::vector<double> sgn_dst1 = signed_distances(plane2);
-    std::vector<double> sgn_dst2 = t.signed_distances(plane1);
 
     // check if all the verticles of the 1st triangle are from the one side from the plane of the 2nd
     if (fabs(sgn_dst1[0]) > EPS && fabs(sgn_dst1[1]) > EPS && fabs(sgn_dst1[2]) > EPS)
         if (sgn_dst1[0]*sgn_dst1[1] >= 0.0 && sgn_dst1[1]*sgn_dst1[2] >= 0.0)
             return false;
 
+    std::vector<double> sgn_dst2 = t.signed_distances(plane1);
+
     // check if all the verticles of the 2nd triangle are from the one side from the plane of the 1st
     if (fabs(sgn_dst2[0]) > EPS && fabs(sgn_dst2[1]) > EPS && fabs(sgn_dst2[2]) > EPS)
         if (sgn_dst2[0]*sgn_dst2[1] >= 0.0 && sgn_dst2[1]*sgn_dst2[2] >= 0.0)
             return false;
 
+    // check if triangles are co-planar, then check their 2D intersection
     if (fabs(sgn_dst1[0]) < EPS && fabs(sgn_dst1[1]) < EPS && fabs(sgn_dst1[2]) < EPS)
     {
-        // triangles are co-planar, check their 2D intersection
-        Geometry2D::Triangle t1_2D = to_triangle2D();
-        Geometry2D::Triangle t2_2D = t.to_triangle2D();
+        // finding axis to project on
+
+        int axis_index = plane1.get_n().max_compomemt();
+
+        Geometry2D::Triangle t1_2D = to_triangle2D(axis_index);
+        Geometry2D::Triangle t2_2D = t.to_triangle2D(axis_index);
 
         return t1_2D.intersect(t2_2D);
     }
 
     Line intersection_line = plane1.intersect(plane2);
-    //
 
-    return false;
+    std::vector<double> interval1 =   projection_interval(intersection_line, sgn_dst1);
+    std::vector<double> interval2 = t.projection_interval(intersection_line, sgn_dst2);
+
+    // std::cout << "interval1: [" << interval1[0] << "," << interval1[1] << "]\n";
+    // std::cout << "interval2: [" << interval2[0] << "," << interval2[1] << "]\n";
+
+    return (interval1[0] <= interval2[1]) && (interval2[0] <= interval1[1]);
 }
 
 void Triangle::print(const char* msg = "") const
