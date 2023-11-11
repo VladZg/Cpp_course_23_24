@@ -25,7 +25,7 @@ struct Point
     bool operator==(const Point& p) const;
     bool operator!=(const Point& p) const;
 
-    Geometry2D::Point to_point2D(int axis_index) const;
+    Geometry2D::Point to_point2D(short axis_index) const;
     // Vec3 to_vec() const { return Vec3(x_, y_, z_); }
 
     void print(const char* msg) const;
@@ -55,18 +55,19 @@ public:
     bool operator==(const Vec3& v) const;
     bool operator!=(const Vec3& v) const;
 
-    int max_compomemt() const;
+    short max_component_index() const;
     double mod() const;
     Vec3 norm() const;
     Vec3 sqalar(double sqalar) const;
     double dot(const Vec3& v) const;
     Vec3 cross(const Vec3& v) const;
+    double mixed(const Vec3& v1, const Vec3& v2) const;
     double cos_angle(const Vec3& v) const;
 
     bool is_collinear(const Vec3& v) const;
     double similarity_coeff(const Vec3& v) const; // only for collinear vectors
 
-    Geometry2D::Vec2 to_vec2() const;
+    Geometry2D::Vec2 to_vec2(short axis_index) const;
     Point to_point() const;
 
     void print(const char* msg) const;
@@ -92,6 +93,36 @@ public:
     void print(const char* msg) const;
 };
 
+class LineSegment
+{
+    Point p_  ;
+    Vec3  dir_;
+
+public:
+    LineSegment() :  p_(Point()), dir_(Vec3()) {}
+    LineSegment(Point p1, Point p2) :  p_(p1), dir_(Vec3(p1,p2)) {}
+    LineSegment(Point p, Vec3 dir) :  p_(p), dir_(dir) {}
+
+    bool is_valid() const { return p_.is_valid() && dir_.is_valid(); }
+
+    Point get_p() const { return p_; }
+    Point get_p2() const { return (Vec3(p_)+dir_).to_point(); }
+    Vec3 get_dir() const { return dir_; }
+
+    bool operator==(const LineSegment& ls) const;
+    bool operator!=(const LineSegment& ls) const;
+
+    Geometry2D::LineSegment to_line_segment_2D(short axis_index) const;
+
+    bool is_parallel(const LineSegment& ls) const;
+    bool is_coplanar(const LineSegment& ls) const;
+
+    bool intersect(const Point& p) const;
+    bool intersect(const LineSegment& ls) const;
+
+    void print(const char* msg) const;
+};
+
 class Plane
 {
     Vec3    n_;
@@ -99,13 +130,15 @@ class Plane
 
 public:
     Plane() : n_(Vec3()), d_(0.0) {}
-    Plane(Vec3 n, double d)  :  n_(n), d_(d) {}
-    Plane(Vec3 n, const Point& p) : n_(n), d_((-1.0)*n.dot(Vec3(p))) {}
+    Plane(const Vec3& n, double d)  :  n_(n), d_(d) {}
+    Plane(const Vec3& n, const Point& p) : n_(n), d_((-1.0)*n.dot(Vec3(p))) {}
     Plane(const Point& p1, const Point& p2, const Point& p3)
     {
         n_ = Vec3(p1, p2).cross(Vec3(p1, p3));
         d_ = (-1.0)*n_.dot(Vec3(p1));
     }
+    Plane(const Line& l1, const Line& l2) : n_((l1.get_dir()).cross(l2.get_dir())), d_((-1.0)*n_.dot(Vec3(l1.get_p()))) {}
+    Plane(const LineSegment& l1, const LineSegment& l2) : n_((l1.get_dir()).cross(l2.get_dir())), d_((-1.0)*n_.dot(Vec3(l1.get_p()))) {}
 
     bool is_valid() const { return n_.is_valid() && (n_ != Vec3()) && (d_ == d_); }
 
@@ -125,6 +158,13 @@ public:
     Line intersect(const Plane& pl) const;
 
     void print(const char* msg) const;
+};
+
+enum TriangleDegenerationType
+{
+    POINT_TYPE          ,
+    LINE_SEGMENT_TYPE   ,
+    TRIANGLE_TYPE
 };
 
 class Triangle
@@ -147,12 +187,22 @@ public:
 
     Plane get_plane() const;
 
+    bool equals_point() const;
+    bool equals_line_segment() const;
+
+    Point to_point() const;
+    LineSegment to_line_segment() const;
+
     std::vector<double> signed_distances(const Plane& pl) const;
     std::vector<double> projection_interval(const Line& l, const std::vector<double>& sgn_dst) const;
 
-    Geometry2D::Triangle to_triangle2D(int axis_index) const;
+    Geometry2D::Triangle to_triangle2D(short axis_index) const;
 
-    bool intersect(const Triangle& t) const;
+    bool intersect(const Point&       p ) const;
+    bool intersect(const LineSegment& ls) const;
+    bool intersect(const Triangle&    t ) const;
+
+    TriangleDegenerationType degeneration_type() const;
 
     void print(const char* msg) const;
 };

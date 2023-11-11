@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/main.dir/Source/triangles.cpp.o CMakeFiles/main.dir/Source/Geometry2D.cpp.o CMakeFiles/main.dir/Source/Geometry3D.cpp.o -o main 
+/usr/bin/c++ CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/Source/Geometry2D.cpp.o CMakeFiles/main.dir/Source/Geometry3D.cpp.o -o main 

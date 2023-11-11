@@ -63,6 +63,7 @@ CMAKE_BINARY_DIR = "/home/vlad/Учёба/Программирование/3 sem
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/triangles.dir/all
 all: CMakeFiles/main.dir/all
 all: CMakeFiles/test_2D.dir/all
 all: CMakeFiles/test_3D.dir/all
@@ -74,6 +75,7 @@ preinstall: googletest/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/triangles.dir/clean
 clean: CMakeFiles/main.dir/clean
 clean: CMakeFiles/test_2D.dir/clean
 clean: CMakeFiles/test_3D.dir/clean
@@ -130,6 +132,32 @@ googletest/googletest/preinstall:
 googletest/googletest/clean: googletest/googletest/CMakeFiles/gtest.dir/clean
 googletest/googletest/clean: googletest/googletest/CMakeFiles/gtest_main.dir/clean
 .PHONY : googletest/googletest/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/triangles.dir
+
+# All Build rule for target.
+CMakeFiles/triangles.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles" --progress-num=21,22,23,24 "Built target triangles"
+.PHONY : CMakeFiles/triangles.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/triangles.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles" 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/triangles.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles" 0
+.PHONY : CMakeFiles/triangles.dir/rule
+
+# Convenience name for target.
+triangles: CMakeFiles/triangles.dir/rule
+.PHONY : triangles
+
+# clean rule for target.
+CMakeFiles/triangles.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/clean
+.PHONY : CMakeFiles/triangles.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/main.dir

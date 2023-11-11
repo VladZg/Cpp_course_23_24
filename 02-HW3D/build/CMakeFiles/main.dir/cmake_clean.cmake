@@ -3,8 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/Source/Geometry2D.cpp.o.d"
   "CMakeFiles/main.dir/Source/Geometry3D.cpp.o"
   "CMakeFiles/main.dir/Source/Geometry3D.cpp.o.d"
-  "CMakeFiles/main.dir/Source/triangles.cpp.o"
-  "CMakeFiles/main.dir/Source/triangles.cpp.o.d"
+  "CMakeFiles/main.dir/main.cpp.o"
+  "CMakeFiles/main.dir/main.cpp.o.d"
   "main"
   "main.pdb"
 )

@@ -1,3 +1,4 @@
+/home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles/triangles.dir
 /home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles/main.dir
 /home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles/test_2D.dir
 /home/vlad/Учёба/Программирование/3 semester/Cpp_course_23_24_local/02-HW3D/build/CMakeFiles/test_3D.dir

@@ -69,11 +69,6 @@ void Vec2::print(const char* msg = "") const
     std::cout << msg << "(" << x_ << ", " << y_ << ")" << std::endl;
 }
 
-
-bool LineSegment::operator==(const LineSegment& l) const { return p_==l.p_ && dir_==l.dir_; }
-bool LineSegment::operator!=(const LineSegment& l) const { return !(*this == l)           ; }
-
-
 bool Line::is_parallel(const Line& l) const { return dir_.is_collinear(l.dir_); }
 bool Line::intersect(const Line& l) const { return !dir_.is_collinear(l.dir_); }
 // bool Line::intersect(const LineSegment& ls) const { return ; }
@@ -97,6 +92,10 @@ bool Line::operator==(const Line& l) const
 bool Line::operator!=(const Line& l) const { return !(*this == l); }
 
 
+
+bool LineSegment::operator==(const LineSegment& l) const { return p_==l.p_ && dir_==l.dir_; }
+bool LineSegment::operator!=(const LineSegment& l) const { return !(*this == l)           ; }
+
 bool LineSegment::intersect(const LineSegment& ls) const
 {
     Vec2 d = Vec2(p_, ls.p_);
@@ -114,7 +113,7 @@ bool LineSegment::intersect(const LineSegment& ls) const
             if (t0 > t1)
                 std::swap(t0, t1);
 
-            return t0 <= 1 && t1 >= 0;
+            return t0 <= 1.0 && t1 >= 0.0;
         }
         else    // line segments are parallel and not intersecting
             return false;
@@ -123,18 +122,29 @@ bool LineSegment::intersect(const LineSegment& ls) const
     {
         double t = d.kross(ls.dir_) / rxs;
         double u = d.kross(dir_) / rxs;
-        return t >= 0 && t <= 1 && u >= 0 && u <= 1;
+        return t >= 0.0 && t <= 1.0 && u >= 0.0 && u <= 1.0;
     }
 
     return false;
 }
 
+void LineSegment::print(const char* msg = "") const
+{
+    std::cout << msg << "point ";
+
+    p_.print();
+    std::cout << ", dir ";
+    dir_.print();
+
+    std::cout << std::endl;
+}
+
 
 bool Triangle::operator==(const Triangle& t) const
 {
-    return (p1_==t.p1_ && p2_ == t.p2_ && p3_ == t.p3_) ||
-           (p1_==t.p2_ && p2_ == t.p3_ && p3_ == t.p1_) ||
-           (p1_==t.p3_ && p2_ == t.p1_ && p3_ == t.p2_);
+    return (p1_ == t.p1_ && p2_ == t.p2_ && p3_ == t.p3_) ||
+           (p1_ == t.p2_ && p2_ == t.p3_ && p3_ == t.p1_) ||
+           (p1_ == t.p3_ && p2_ == t.p1_ && p3_ == t.p2_);
 }
 bool Triangle::operator!=(const Triangle& t) const { return !(*this==t); }
 
@@ -154,7 +164,7 @@ bool Triangle::is_point_inside(const Point &p) const
     double u = (v1v1 * v0v2 - v0v1 * v1v2) * norm;
     double v = (v0v0 * v1v2 - v0v1 * v0v2) * norm;
 
-    return (u >= 0) && (v >= 0) && (u + v <= 1);
+    return (u >= 0.0) && (v >= 0.0) && (u + v <= 1.0);
 }
 
 bool Triangle::intersect(const LineSegment &ls) const

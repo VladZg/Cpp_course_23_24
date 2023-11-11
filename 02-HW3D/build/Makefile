@@ -172,6 +172,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named triangles
+
+# Build rule for target.
+triangles: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 triangles
+.PHONY : triangles
+
+# fast build rule for target.
+triangles/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/build
+.PHONY : triangles/fast
+
+#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -267,6 +280,7 @@ Source/Geometry2D.o: Source/Geometry2D.cpp.o
 
 # target to build an object file
 Source/Geometry2D.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry2D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry2D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry2D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry2D.cpp.o
@@ -277,6 +291,7 @@ Source/Geometry2D.i: Source/Geometry2D.cpp.i
 
 # target to preprocess a source file
 Source/Geometry2D.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry2D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry2D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry2D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry2D.cpp.i
@@ -287,6 +302,7 @@ Source/Geometry2D.s: Source/Geometry2D.cpp.s
 
 # target to generate assembly for a file
 Source/Geometry2D.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry2D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry2D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry2D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry2D.cpp.s
@@ -297,6 +313,7 @@ Source/Geometry3D.o: Source/Geometry3D.cpp.o
 
 # target to build an object file
 Source/Geometry3D.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry3D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry3D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry3D.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry3D.cpp.o
@@ -307,6 +324,7 @@ Source/Geometry3D.i: Source/Geometry3D.cpp.i
 
 # target to preprocess a source file
 Source/Geometry3D.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry3D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry3D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry3D.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry3D.cpp.i
@@ -317,6 +335,7 @@ Source/Geometry3D.s: Source/Geometry3D.cpp.s
 
 # target to generate assembly for a file
 Source/Geometry3D.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/Geometry3D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/Geometry3D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_2D.dir/build.make CMakeFiles/test_2D.dir/Source/Geometry3D.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Source/Geometry3D.cpp.s
@@ -327,7 +346,7 @@ Source/triangles.o: Source/triangles.cpp.o
 
 # target to build an object file
 Source/triangles.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/triangles.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/triangles.cpp.o
 .PHONY : Source/triangles.cpp.o
 
 Source/triangles.i: Source/triangles.cpp.i
@@ -335,7 +354,7 @@ Source/triangles.i: Source/triangles.cpp.i
 
 # target to preprocess a source file
 Source/triangles.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/triangles.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/triangles.cpp.i
 .PHONY : Source/triangles.cpp.i
 
 Source/triangles.s: Source/triangles.cpp.s
@@ -343,7 +362,7 @@ Source/triangles.s: Source/triangles.cpp.s
 
 # target to generate assembly for a file
 Source/triangles.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/Source/triangles.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/triangles.dir/build.make CMakeFiles/triangles.dir/Source/triangles.cpp.s
 .PHONY : Source/triangles.cpp.s
 
 Test/test_2D.o: Test/test_2D.cpp.o
@@ -394,6 +413,30 @@ Test/test_3D.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_3D.dir/build.make CMakeFiles/test_3D.dir/Test/test_3D.cpp.s
 .PHONY : Test/test_3D.cpp.s
 
+main.o: main.cpp.o
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
+.PHONY : main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -414,6 +457,7 @@ help:
 	@echo "... main"
 	@echo "... test_2D"
 	@echo "... test_3D"
+	@echo "... triangles"
 	@echo "... Source/Geometry2D.o"
 	@echo "... Source/Geometry2D.i"
 	@echo "... Source/Geometry2D.s"
@@ -429,6 +473,9 @@ help:
 	@echo "... Test/test_3D.o"
 	@echo "... Test/test_3D.i"
 	@echo "... Test/test_3D.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

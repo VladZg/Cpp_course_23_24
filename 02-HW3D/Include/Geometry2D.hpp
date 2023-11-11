@@ -75,7 +75,7 @@ class LineSegment
 public:
     LineSegment() :  p_(Point()), dir_(Vec2()) {}
     LineSegment(Point p1, Point p2) :  p_(p1), dir_(Vec2(p1,p2)) {}
-    LineSegment(Point p) :  p_(p), dir_(Vec2()) {}
+    LineSegment(Point p, Vec2 dir) :  p_(p), dir_(dir) {}
 
     bool is_valid() const { return p_.is_valid() && dir_.is_valid(); }
 
@@ -87,6 +87,8 @@ public:
     bool operator!=(const LineSegment& l) const;
 
     bool intersect(const LineSegment& ls) const;
+
+    void print(const char* msg) const;
 };
 
 class Line

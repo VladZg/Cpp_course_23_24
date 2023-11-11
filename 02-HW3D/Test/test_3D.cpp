@@ -70,6 +70,48 @@ TEST(Plane, operator_eq)
     EXPECT_TRUE(pl2 == pl3);
 }
 
+TEST(Triangle, to_line_segment)
+{
+    Point p1(1,0,0);
+    Point p2(2,0,0);
+    Point p3(3,0,0);
+    Triangle t1(p1, p2, p3);
+
+    EXPECT_TRUE(t1.equals_line_segment());
+    EXPECT_TRUE(t1.to_line_segment() == LineSegment(Point(3,0,0), Vec3(-2,0,0)));
+    EXPECT_TRUE(t1.to_line_segment() != LineSegment(Point(2,0,0), Vec3(-1,0,0)));
+    EXPECT_TRUE(t1.to_line_segment() == LineSegment(Point(1,0,0), Vec3(2,0,0)));
+
+    Point p4(1,0,0);
+    Point p5(3,1,0);
+    Point p6(1,0,0);
+    Triangle t2(p4, p5, p6);
+
+    // t2.to_line_segment().print("");
+
+    EXPECT_TRUE(t2.equals_line_segment());
+    EXPECT_TRUE(t2.to_line_segment() == LineSegment(Point(1,0,0), Vec3(2,1,0)));
+    EXPECT_TRUE(t2.to_line_segment() == LineSegment(Point(3,1,0), Vec3(-2,-1,0)));
+    EXPECT_TRUE(t2.to_line_segment() != LineSegment(Point(1,0,0), Vec3(4,2,0)));
+}
+
+TEST(LineSegment, intersect_point)
+{
+    Point p1(1,1,0);
+    Point p2(-1,-1,0);
+    Point p3(3,3,0);
+    Triangle t1(p1, p2, p3);
+
+    Point p4(1,0,0);
+    Point p5(3,1,0);
+    Point p6(1,0,0);
+    Triangle t2(p4, p5, p6);
+
+    EXPECT_TRUE(t1.equals_line_segment());
+    // t1.to_line_segment().print("LINE SEGMENT: ");
+    EXPECT_TRUE(t1.to_line_segment().intersect(Point(0,0,0)));
+}
+
 TEST(Plane, intersect)
 {
     Plane plane1 = Plane(Point(1,0,0), Point(0,1,0), Point(0,0,0));
@@ -123,6 +165,72 @@ TEST(Triangle, intersect)
     // EXPECT_TRUE(t3.intersect(t4));
     EXPECT_TRUE(!t5.intersect(t6));
     EXPECT_TRUE(t1.intersect(t7));
+}
+
+TEST(LineSegment, to_line_segment_2D)
+{
+    Point p = Point(1.43, 22.9, -17.4);
+    Vec3 v = Vec3(-1.75, 12.4, 0.0);
+    LineSegment ls = LineSegment(p, v);
+
+    Geometry2D::LineSegment ls_2D = ls.to_line_segment_2D(v.max_component_index());
+    // ls.print("LINE SEGMENT 3D: ");
+    // ls_2D.print("LINE SEGMENT 2D: ");
+
+    EXPECT_TRUE(ls_2D == Geometry2D::LineSegment(Geometry2D::Point(-17.4, 1.43), Geometry2D::Vec2(0.0, -1.75)));
+}
+
+TEST(LineSegment, intersect_line_segment)
+{
+    Point p1 = Point(0,0,0);
+    Vec3 v1 = Vec3(1,1,1);
+    LineSegment ls1 = LineSegment(p1, v1);
+
+    Point p2 = Point(0,0,0);
+    Vec3 v2 = Vec3(-1,-1,-1);
+    LineSegment ls2 = LineSegment(p2, v2);
+
+    Point p3 = Point(0,0,-1);
+    Vec3 v3 = Vec3(1,1,-1);
+    LineSegment ls3 = LineSegment(p3, v3);
+
+    Point p4 = Point(-1,0,0);
+    Vec3 v4 = Vec3(0,-1,0);
+    LineSegment ls4 = LineSegment(p4, v4);
+
+    Point p5 = Point(0,0,0);
+    Vec3 v5 = Vec3(-1,-1,-1);
+    LineSegment ls5 = LineSegment(p5, v5);
+
+    // ls.print("LINE SEGMENT 3D: ");
+    // ls_2D.print("LINE SEGMENT 2D: ");
+
+    EXPECT_TRUE(ls1.intersect(ls2));
+    EXPECT_TRUE(!ls1.intersect(ls3));
+    EXPECT_TRUE(ls1.intersect(ls1));
+    EXPECT_TRUE(!ls1.intersect(ls4));
+    EXPECT_TRUE(ls2.intersect(ls2));
+    EXPECT_TRUE(ls3.intersect(ls3));
+}
+
+TEST(Triangle, intersect_line_segment)
+{
+    Triangle t1(Point(0.0, 0.0, 0.0), Point(0.0, 1.0, 0.0), Point(1.0, 0.0, 0.0));
+    LineSegment ls1 = LineSegment(Point(0,0,0), Vec3(0,0,1));
+
+    // Triangle t2(Point(0.0, 0.0, 0.0), Point(0.0, 1.0, 0.0), Point(1.0, 0.0, 0.0));
+    LineSegment ls2 = LineSegment(Point(0.5,0.5,-1), Vec3(0,0,2));
+
+    // Triangle t1(Point(0.0, 0.0, 0.0), Point(0.0, 1.0, 0.0), Point(1.0, 0.0, 0.0));
+    LineSegment ls3 = LineSegment(Point(0.5,0,0), Vec3(-1,1,0));
+    //
+    // Triangle t1(Point(0.0, 0.0, 0.0), Point(0.0, 1.0, 0.0), Point(1.0, 0.0, 0.0));
+    LineSegment ls4 = LineSegment(Point(0,0,1), Vec3(0,0,-1));
+
+    EXPECT_TRUE(t1.intersect(ls1));
+    EXPECT_TRUE(t1.intersect(ls2));
+    EXPECT_TRUE(t1.intersect(ls3));
+    EXPECT_TRUE(t1.intersect(ls4));
 }
 
 

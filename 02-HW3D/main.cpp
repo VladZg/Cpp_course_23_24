@@ -5,8 +5,8 @@
 #include <fstream>
 #include <algorithm>
 #include <unordered_set>
-#include "../Include/Geometry2D.hpp"
-#include "../Include/Geometry3D.hpp"
+#include "./Include/Geometry2D.hpp"
+#include "./Include/Geometry3D.hpp"
 
 using namespace Geometry3D;
 
@@ -97,19 +97,9 @@ void intersect_all(const std::vector<Triangle>& fig_arr, std::unordered_set<int>
         {
             if(intersect_triangles(fig_arr[i], fig_arr[j]))
             {
-                std::cout << "\x1B[32m" "INTERSECTION: " "\x1B[0m";
-
                 index_set.insert(i);
                 index_set.insert(j);
             }
-
-            else
-                std::cout << "\x1B[31m" "NOT AN INTERSECTION: " "\x1B[0m";
-
-            std::cout << "triangle " << i << " with triangle " << j << ":\n";
-            fig_arr[i].print("");
-            fig_arr[j].print("");
-            std::cout << std::endl;
         }
     }
 }
@@ -138,7 +128,6 @@ int main()
     index_vec.insert(index_vec.begin(), index_set.begin(), index_set.end());
     std::sort(index_vec.begin(), index_vec.end());
 
-    std::cout << "Indexes of triangles that intersects: ";
     // using SetIt = typename std::unordered_set<int>::iterator;
     for (auto it  = index_vec.begin(); it != index_vec.end(); ++it)
         std::cout << *it << " ";
